@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Good Life Jobs — Sollicitatie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--dark:#053234;--teal:#076163;--orange:#f87c4e;--cream:#F3F7EB;--white:#ffffff;--border:#d8ddd6;--text:#1a2e2f}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Montserrat',-apple-system,sans-serif;background:var(--cream);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:12px}
+  #app{width:100%;max-width:440px}
+  .shell{display:flex;flex-direction:column;height:680px;background:var(--white);border-radius:18px;box-shadow:0 6px 32px rgba(5,50,52,.15);overflow:hidden}
+  .hd{background:var(--dark);padding:12px 16px 10px;flex-shrink:0}
+  .hd-logo{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+  .hd-logo-mark{width:22px;height:22px;border-radius:5px;background:var(--orange);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:8px;font-weight:800;color:#fff;letter-spacing:-.3px}
+  .hd-logo-text{font-size:11px;font-weight:700;color:var(--cream);letter-spacing:.3px;text-transform:uppercase}
+  .hd-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .hd-title{font-weight:600;font-size:13px;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hd-sub{font-size:10px;color:rgba(243,247,235,.6)}
+  .hd-pct{font-size:11px;color:rgba(243,247,235,.8);flex-shrink:0}
+  .prog-bar{height:3px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden}
+  .prog-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .5s ease}
+  .cbar{background:var(--teal);padding:7px 16px;flex-shrink:0;display:flex;align-items:center;gap:8px}
+  .cbar-av{width:22px;height:22px;border-radius:50%;background:rgba(243,247,235,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;font-weight:700;color:#fff}
+  .cbar-name{font-size:11px;color:rgba(243,247,235,.9);font-weight:500}
+  .msgs{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:8px;background:var(--cream)}
+  .msg-row{display:flex}.msg-row.user{justify-content:flex-end}
+  .bubble{max-width:88%;padding:9px 13px;font-size:13px;line-height:1.55;white-space:pre-line}
+  .bubble.bot{background:#fff;border:1px solid var(--border);border-radius:16px 16px 16px 4px;color:var(--text)}
+  .bubble.user{background:var(--dark);color:#fff;border-radius:16px 16px 4px 16px}
+  @keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+  .dot{width:6px;height:6px;border-radius:50%;background:#aaa;display:inline-block;animation:bop 1.2s ease-in-out infinite}
+  .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+  .sug-wrap{display:flex;flex-direction:column;gap:8px;padding:0 2px}
+  .sug-card{text-align:left;padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);background:#fff;cursor:pointer;width:100%;transition:border-color .15s;font-family:'Montserrat',sans-serif}
+  .sug-card:hover{border-color:var(--teal)}.sug-card.selected{border-color:var(--dark)}.sug-card.dim{opacity:.4;cursor:default}
+  .sug-title{font-weight:600;font-size:13px;color:var(--dark)}
+  .sug-client{font-size:11px;color:var(--teal);font-weight:600;margin-top:1px}
+  .sug-loc{font-size:11px;color:#666;margin-top:2px}
+  .sug-cta{font-size:11px;margin-top:7px;font-weight:500}
+  .sug-cta.active{color:var(--teal)}.sug-cta.done{color:#1e7e34}
+  .inp-area{flex-shrink:0;background:#fff;border-top:1px solid var(--border)}
+  .chips{padding:10px 12px;display:flex;flex-wrap:wrap;gap:7px}
+  .chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--dark);background:#fff;color:var(--dark);font-size:12px;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:500;transition:background .12s,color .12s}
+  .chip:hover,.chip.selected{background:var(--dark);color:#fff}
+  .chip:active{transform:scale(.97)}
+  .chip.custom-opt{border-color:var(--teal);color:var(--teal)}
+  .chip.custom-opt:hover,.chip.custom-opt.selected{background:var(--teal);color:#fff}
+  .multi-go-wrap{padding:0 12px 10px}
+  .txt-row{padding:10px 12px;display:flex;gap:8px;align-items:flex-end}
+  .txt-row input,.txt-row textarea{flex:1;font-size:13px;font-family:'Montserrat',sans-serif;border:1.5px solid var(--border);border-radius:10px;padding:8px 11px;outline:none;resize:none;background:#fafafa;color:var(--text);line-height:1.45}
+  .txt-row input:focus,.txt-row textarea:focus{border-color:var(--teal);background:#fff}
+  .send-btn{padding:0 14px;height:36px;border-radius:10px;background:var(--dark);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:600;font-family:'Montserrat',sans-serif;flex-shrink:0}
+  .send-btn:hover{background:var(--teal)}
+  .slider-wrap{padding:13px 16px}
+  .slider-row{margin-bottom:9px}
+  .slider-lbl{display:flex;justify-content:space-between;font-size:11px;color:#666;margin-bottom:4px;font-weight:500}
+  .slider-lbl strong{color:var(--dark);font-weight:700}
+  input[type=range]{width:100%;margin:0;accent-color:var(--teal);cursor:pointer}
+  .slider-val-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .slider-disp{font-size:14px;font-weight:700;color:var(--dark)}
+  .confirm-btn{width:100%;padding:11px;border-radius:10px;background:var(--orange);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:'Montserrat',sans-serif;transition:opacity .15s}
+  .confirm-btn:hover{opacity:.88}.confirm-btn:disabled{opacity:.4;cursor:default}
+  .done-bar{padding:12px 16px;text-align:center;font-size:12px;color:#555;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500}
+  .select-screen{padding:2rem 1.25rem;max-height:100vh;overflow-y:auto}
+  .sel-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:1.5rem}
+  .sel-logo-mark{width:36px;height:36px;border-radius:10px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;letter-spacing:-.3px}
+  .sel-logo-text{font-size:18px;font-weight:800;color:var(--dark)}
+  .sel-title{font-size:14px;color:#555;text-align:center;margin-bottom:1.5rem;font-weight:500}
+  .client-group{margin-bottom:20px}
+  .client-header{font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;padding-left:2px}
+  .vac-cards{display:flex;flex-direction:column;gap:9px}
+  .vac-card{text-align:left;padding:14px 16px;background:#fff;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;width:100%;transition:border-color .12s,box-shadow .12s;font-family:'Montserrat',sans-serif}
+  .vac-card:hover{border-color:var(--teal);box-shadow:0 2px 10px rgba(7,97,99,.12)}
+  .vac-name{font-weight:700;font-size:14px;color:var(--dark)}
+  .vac-loc{font-size:12px;color:#666;margin-top:2px}
+  @keyframes fadein{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+  .nm{animation:fadein .2s ease}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const WEBHOOK   = "https://hook.eu1.make.com/7enxwkzposiksv7dzvq4ll1eu9legi3u";
+const WA_NUMBER = "31657900347";
+
+// ── VACANCIES ─────────────────────────────────────────────────────────────────
+// suggests: vacancy keys to show at completion (all bidirectional, configured here)
+// roleLabel: used in Q2 ("En hoeveel jaar heb je gewerkt als [roleLabel] of in een vergelijkbare functie?")
+const VACANCIES = {
+
+  "elektromonteur-ardagh-moerdijk": {
+    title:"Elektromonteur Dagdienst", client:"Ardagh Group", loc:"Moerdijk",
+    roleLabel:"elektromonteur",
+    suggests:["monteur-td-goedhart-wateringen"],
+    extra:[
+      {id:"plc", text:"Heb je ervaring met PLC-besturing en/of industriële besturingssystemen?", type:"choice",
+        opts:["Ja, ruime ervaring — onderhoud én programmeren","Ja, ik kan ermee werken maar niet programmeren","Beperkte ervaring","Nee"]},
+      {id:"consignatie", text:"Ben je bereid om consignatiediensten (bereikbaarheidsdienst buiten kantoortijden) te draaien?", type:"choice",
+        opts:["Ja, geen probleem","Incidenteel is oké","Nee, liever niet"]},
+      {id:"industrie", text:"Heb je ervaring in een groot industrieel productiebedrijf (procesindustrie, chemie, glas of food)?", type:"choice",
+        opts:["Ja, meerdere jaren","Ja, beperkte ervaring","Nee, maar ben snel leerbaar"]},
+      {id:"sap", text:"Ben je bekend met SAP of een ander onderhoudsmanagementsysteem (CMMS)?", type:"choice",
+        opts:["Ja, werk er dagelijks mee","Ja, heb er mee gewerkt","Nee, maar wil dit leren"]}
+    ]
+  },
+
+  "monteur-td-goedhart-wateringen": {
+    title:"Monteur Technische Dienst", client:"Bakker Goedhart", loc:"Wateringen",
+    roleLabel:"monteur technische dienst",
+    suggests:["elektromonteur-ardagh-moerdijk"],
+    extra:[
+      {id:"procesindustrie", text:"Heb je ervaring in de voedingsmiddelenindustrie of een andere procesindustrie?", type:"choice",
+        opts:["Ja, voedingsmiddelenindustrie","Ja, andere procesindustrie","Nee, maar ben snel leerbaar"]},
+      {id:"storingen", text:"Hoe zou je je storingsaanpak omschrijven?", type:"choice",
+        opts:["Zelfstandig diagnose stellen én oplossen","Diagnose met team, uitvoering zelfstandig","Uitvoering met begeleiding","Weinig storingsonderhoud gedaan"]},
+      {id:"achtergrond_td", text:"Wat is je technische achtergrond?", type:"choice",
+        opts:["Voornamelijk mechanisch","Voornamelijk elektrotechnisch","Beide even sterk","Generalist / allround"]},
+      {id:"haccp", text:"Ben je bekend met HACCP of voedselveiligheidsregels?", type:"choice",
+        opts:["Ja, certificaat of training gevolgd","Ja, mee gewerkt maar geen certificaat","Nee, maar wil dit leren"]}
+    ]
+  },
+
+  "monteur-td-goedhart-hedel": {
+    title:"Monteur Technische Dienst", client:"Bakker Goedhart", loc:"Hedel",
+    roleLabel:"monteur technische dienst",
+    suggests:["service-engineer-de-koningh","monteur-td-werkvoorbereiding-goedhart-hedel"],
+    extra:[
+      {id:"procesindustrie", text:"Heb je ervaring in de voedingsmiddelenindustrie of een andere procesindustrie?", type:"choice",
+        opts:["Ja, voedingsmiddelenindustrie","Ja, andere procesindustrie","Nee, maar ben snel leerbaar"]},
+      {id:"storingen", text:"Hoe zou je je storingsaanpak omschrijven?", type:"choice",
+        opts:["Zelfstandig diagnose stellen én oplossen","Diagnose met team, uitvoering zelfstandig","Uitvoering met begeleiding","Weinig storingsonderhoud gedaan"]},
+      {id:"achtergrond_td", text:"Wat is je technische achtergrond?", type:"choice",
+        opts:["Voornamelijk mechanisch","Voornamelijk elektrotechnisch","Beide even sterk","Generalist / allround"]},
+      {id:"haccp", text:"Ben je bekend met HACCP of voedselveiligheidsregels?", type:"choice",
+        opts:["Ja, certificaat of training gevolgd","Ja, mee gewerkt maar geen certificaat","Nee, maar wil dit leren"]}
+    ]
+  },
+
+  "monteur-td-werkvoorbereiding-goedhart-hedel": {
+    title:"Monteur TD & Werkvoorbereiding", client:"Bakker Goedhart", loc:"Hedel",
+    roleLabel:"monteur technische dienst",
+    suggests:["monteur-td-goedhart-hedel","service-engineer-de-koningh"],
+    extra:[
+      {id:"schemas", text:"Kun je elektrotechnische schema's lezen om storingen te diagnosticeren?", type:"choice",
+        opts:["Ja, dit doe ik zelfstandig","Ja, maar heb soms ondersteuning nodig","Beperkte ervaring","Nee"]},
+      {id:"plc_freq", text:"Heb je ervaring met PLC's of frequentieregelaars?", type:"choice",
+        opts:["Ja, ik troubleshoot én programmeer PLC's","Ja, ik kan troubleshooten maar niet programmeren","Beperkte kennis","Nee, geen ervaring"]},
+      {id:"werkvoorbereiding", text:"Heb je ervaring met werkvoorbereiding, zoals het plannen van onderhoud, regelen van inkoop of het voorbereiden van werk voor collega-monteurs?", type:"choice",
+        opts:["Ja, ruime ervaring met werkvoorbereiding","Ja, beperkte ervaring (bijv. planning of inkoop)","Nee, maar ik zie dit als een interessante stap","Nee, dit past niet bij me"]},
+      {id:"hightech_machines", text:"Heb je ervaring met onderhoud of storingen aan complexe productiemachines, zoals verpakkingsrobots, kneders of geautomatiseerde lijnen?", type:"choice",
+        opts:["Ja, ruime ervaring met dit type machines","Ja, beperkte ervaring","Andere productieomgeving maar vergelijkbaar niveau","Nee"]}
+    ]
+  },
+
+  "service-engineer-de-koningh": {
+    title:"Service Engineer", client:"De Koningh", loc:"Heel midden Nederland",
+    roleLabel:"service engineer",
+    suggests:["service-monteur-rhima","inbouwspecialist-gps-buddy","monteur-td-goedhart-hedel","monteur-td-werkvoorbereiding-goedhart-hedel"],
+    extra:[
+      {id:"buitendienst_exp", text:"Heb je ervaring met het zelfstandig installeren of onderhouden van machines bij klanten op locatie?", type:"choice",
+        opts:["Ja, uitgebreide buitendienst ervaring","Ja, beperkte buitendienst ervaring","Voornamelijk binnendienst ervaring","Nee"]},
+      {id:"klantgerichtheid", text:"Hoe omschrijf je jouw klantgerichtheid? Als service engineer ben je het visitekaartje bij de klant.", type:"choice",
+        opts:["Ik communiceer actief en proactief met klanten","Ik los het technisch op en informeer de klant achteraf","Ik prefereer zo min mogelijk klantcontact"]},
+      {id:"rijbewijs_dk", text:"Ben je in het bezit van rijbewijs B? (Je rijdt in een bedrijfsbus door heel Nederland)", type:"choice",
+        opts:["Ja","Nee, maar haal ik binnenkort","Nee"]},
+      {id:"mechanisch_elektro", text:"Heb je ervaring met zowel mechanische als elektrotechnische componenten?", type:"choice",
+        opts:["Ja, beide vlakken sterk","Voornamelijk mechanisch","Voornamelijk elektrotechnisch","Beperkte ervaring"]}
+    ]
+  },
+
+  "inbouwspecialist-gps-buddy": {
+    title:"Inbouwspecialist", client:"GPS Buddy", loc:"Almere",
+    roleLabel:"inbouwspecialist",
+    suggests:["service-monteur-rhima","service-engineer-de-koningh"],
+    extra:[
+      {id:"voertuig_electronica", text:"Heb je ervaring met het installeren van elektronica in voertuigen of machines (bijv. GPS, boordcomputers, camera's of telematica)?", type:"choice",
+        opts:["Ja, uitgebreide ervaring","Ja, beperkte ervaring","Nee, maar ben elektrotechnisch vaardig","Nee"]},
+      {id:"rijbewijs_gpb", text:"Ben je in het bezit van rijbewijs B en bereid om door Nederland te reizen voor installaties?", type:"choice",
+        opts:["Ja, rijbewijs B en reizen is prima","Ja rijbewijs, liever regionaal werken","Nee, geen rijbewijs B"]},
+      {id:"bekabeling", text:"Hoe zou je jouw ervaring met elektrotechnisch werk in voertuigen (bekabeling, aansluiten op spanning) omschrijven?", type:"choice",
+        opts:["Dit is mijn specialiteit","Heb ik goede ervaring mee","Basiskennis, ben leerbaar","Geen ervaring"]},
+      {id:"training_klant", text:"Ben je bereid klanten na installatie te trainen of te adviseren over het systeem?", type:"choice",
+        opts:["Ja, vind ik leuk","Prima als het nodig is","Liever niet"]}
+    ]
+  },
+
+  "teamleider-td-huis-van-bakkers": {
+    title:"Teamleider Technische Dienst", client:"Huis van Bakkers", loc:"Nieuw Amsterdam",
+    roleLabel:"monteur in de technische dienst",
+    suggests:["monteur-koeltechniek-tolsma","monteur-elektro-tolsma"],
+    extra:[
+      {id:"leidinggevend", text:"Heb je ervaring in een leidinggevende of coördinerende rol in een technische omgeving?", type:"choice",
+        opts:["Ja, formele leidinggevende functie","Ja, informele leidersrol op de werkvloer","Nee, maar wil deze stap zetten","Nee"]},
+      {id:"procesindustrie_hvb", text:"Heb je ervaring in de voedingsmiddelenindustrie of een vergelijkbare procesindustrie?", type:"choice",
+        opts:["Ja, voedingsmiddelenindustrie","Ja, andere procesindustrie","Nee, maar ben snel leerbaar"]},
+      {id:"preventief_coord", text:"Heb je ervaring met het plannen en coördineren van preventief onderhoud voor een ploeg?", type:"choice",
+        opts:["Ja, ik heb dit zelfstandig gedaan","Ja, als onderdeel van een groter team","Beperkte ervaring","Nee"]},
+      {id:"haccp_hvb", text:"Heb je ervaring met HACCP of voedselveiligheidsregels in een productieomgeving?", type:"choice",
+        opts:["Ja, certificaat of training gevolgd","Ja, mee gewerkt maar geen certificaat","Nee, maar wil dit leren"]}
+    ]
+  },
+
+  "technisch-operator-perpetual-next": {
+    title:"Technisch Operator", client:"Perpetual Next Conversions", loc:"Lelystad",
+    roleLabel:"technisch operator",
+    suggests:[],
+    extra:[
+      {id:"procesinstallatie", text:"Heb je ervaring met het bedienen of bewaken van een procesinstallatie of energiecentrale?", type:"choice",
+        opts:["Ja, uitgebreide ervaring","Ja, beperkte ervaring","Nee, maar heb een technische achtergrond","Nee"]},
+      {id:"scada", text:"Ben je bekend met SCADA of andere procesbesturings- en monitoringssystemen?", type:"choice",
+        opts:["Ja, werk er dagelijks mee","Ja, heb er mee gewerkt","Nee, maar wil dit leren"]},
+      {id:"storingen_operator", text:"Hoe omschrijf je jouw ervaring met het zelfstandig oplossen van technische storingen?", type:"choice",
+        opts:["Zelfstandig diagnose en oplossing","Diagnose met begeleiding, zelfstandig uitvoeren","Uitvoering met begeleiding","Weinig storingsonderhoud gedaan"]},
+      {id:"inspecties", text:"Heb je ervaring met het uitvoeren van inspecties, metingen of analyses in een technische of industriële omgeving?", type:"choice",
+        opts:["Ja, regelmatig en zelfstandig","Ja, incidenteel","Beperkte ervaring","Nee"]}
+    ]
+  },
+
+  "service-monteur-rhima": {
+    title:"Service Monteur", client:"Rhima", loc:"Regio Zwolle \u2013 Assen",
+    roleLabel:"service monteur",
+    suggests:["service-engineer-de-koningh","inbouwspecialist-gps-buddy"],
+    extra:[
+      {id:"buitendienst_rhima", text:"Heb je ervaring met het zelfstandig onderhouden of repareren van professionele machines bij klanten op locatie?", type:"choice",
+        opts:["Ja, dit is mijn specialiteit","Ja, beperkte buitendienst ervaring","Voornamelijk binnendienst ervaring","Nee"]},
+      {id:"rijbewijs_rhima", text:"Ben je in het bezit van rijbewijs B? (Je werkt vanuit huis in de regio Zwolle\u2013Assen)", type:"choice",
+        opts:["Ja","Nee, maar haal ik binnenkort","Nee"]},
+      {id:"zelfstandig_plannen", text:"Hoe comfortabel ben je met het zelfstandig inplannen en afhandelen van servicebezoeken?", type:"choice",
+        opts:["Ik werk graag zelfstandig en plan mijn eigen dag","Prima, maar ik vind sturing ook prettig","Ik werk liever in teamverband met vaste planning"]},
+      {id:"horeca_catering", text:"Heb je ervaring in de horeca, catering, zorg of foodservice branche?", type:"choice",
+        opts:["Ja, uitgebreide ervaring","Ja, beperkte ervaring","Nee, maar andere servicebranches","Nee"]}
+    ]
+  },
+
+  "monteur-buitendienst-romass": {
+    title:"Monteur Buitendienst", client:"Romass", loc:"Noord-Holland",
+    roleLabel:"monteur buitendienst",
+    suggests:[],
+    extra:[
+      {id:"toegangssystemen", text:"Heb je ervaring met het installeren of onderhouden van industriële toegangs- of beveiligingssystemen?", type:"choice",
+        opts:["Ja, uitgebreide ervaring","Ja, beperkte ervaring","Nee, maar heb elektrotechnische achtergrond","Nee"]},
+      {id:"rijbewijs_romass", text:"Ben je in het bezit van rijbewijs B en bereid in de regio Noord-Holland te werken?", type:"choice",
+        opts:["Ja, rijbewijs B en deze regio is goed","Ja rijbewijs, ook andere regio's prima","Nee, geen rijbewijs B"]},
+      {id:"bekabeling_romass", text:"Hoe omschrijf je jouw ervaring met elektrotechnische installaties of bekabelingswerkzaamheden?", type:"choice",
+        opts:["Dit is mijn specialiteit","Ja, regelmatig","Beperkte ervaring","Geen ervaring"]},
+      {id:"zelfstandig_romass", text:"Ben je comfortabel met zelfstandig werken bij klanten en zelf storingen diagnosticeren?", type:"choice",
+        opts:["Ja, prima zelfstandig","Ik wissel graag af met collega's","Ik werk liever in teamverband"]}
+    ]
+  },
+
+  "monteur-koeltechniek-tolsma": {
+    title:"Monteur Koeltechniek", client:"Tolsma-Grisnich", loc:"Emmeloord",
+    roleLabel:"monteur koeltechniek",
+    suggests:["monteur-elektro-tolsma","teamleider-td-huis-van-bakkers"],
+    extra:[
+      {id:"fgassen_tolsma", text:"Ben je in het bezit van een F-gassen certificaat of een koeltechniek opleiding?", type:"choice",
+        opts:["Ja, F-gassen categorie I","Ja, F-gassen categorie II","Geen certificaat, maar wel koeltechniek ervaring","Nee"]},
+      {id:"koelinstallaties", text:"Heb je ervaring met het onderhouden of installeren van koelinstallaties of klimaatsystemen?", type:"choice",
+        opts:["Ja, uitgebreide ervaring","Ja, beperkte ervaring","Nee, maar heb HVAC achtergrond","Nee"]},
+      {id:"piket_tolsma_koel", text:"Ben je bereid om buiten reguliere werktijden opgeroepen te worden voor storingen (piketdienst)?", type:"choice",
+        opts:["Ja, geen probleem","Incidenteel is oké","Nee, liever niet"]},
+      {id:"agrarisch_koel", text:"Heb je ervaring in de agrarische sector of bij de opslag van groenten, aardappelen of bloembollen?", type:"choice",
+        opts:["Ja, uitgebreide ervaring","Ja, beperkte ervaring","Nee, maar andere procesindustrie","Nee"]}
+    ]
+  },
+
+  "monteur-elektro-tolsma": {
+    title:"Monteur Elektrotechniek", client:"Tolsma-Grisnich", loc:"Emmeloord",
+    roleLabel:"elektromonteur",
+    suggests:["monteur-koeltechniek-tolsma","teamleider-td-huis-van-bakkers"],
+    extra:[
+      {id:"industrieel_elektro", text:"Heb je ervaring met elektrotechnische installaties in een industriële of agrarische omgeving?", type:"choice",
+        opts:["Ja, uitgebreide ervaring","Ja, beperkte ervaring","Geen agrarische ervaring, wel industrieel","Nee"]},
+      {id:"plc_tolsma", text:"Heb je kennis van of ervaring met PLC-besturing of automatisering?", type:"choice",
+        opts:["Ja, ik kan programmeren en onderhouden","Ja, ik kan onderhouden maar niet programmeren","Basiskennis","Nee"]},
+      {id:"piket_tolsma_elektro", text:"Ben je bereid om buiten reguliere werktijden opgeroepen te worden voor storingen (piketdienst)?", type:"choice",
+        opts:["Ja, geen probleem","Incidenteel is oké","Nee, liever niet"]},
+      {id:"schemas", text:"Heb je ervaring met het lezen en interpreteren van elektrotechnische schema's en tekeningen?", type:"choice",
+        opts:["Ja, standaard onderdeel van mijn werk","Ja, met enige moeite","Beperkte ervaring","Nee"]}
+    ]
+  }
+};
+
+// ── GENERIC QUESTIONS ─────────────────────────────────────────────────────────
+const GQ = [
+  // Q1 — total technical experience (general, no role title)
+  {id:"exp_total", text:"Hoeveel jaar technische werkervaring heb je in totaal?", type:"choice",
+    opts:["Minder dan 1 jaar","1–3 jaar","3–5 jaar","5–10 jaar","Meer dan 10 jaar"]},
+
+  // Q2 — role-specific experience (text injected dynamically from vacancy roleLabel)
+  {id:"exp_rel", text:"__dynamic__", type:"choice",
+    opts:["Dit is een andere richting voor mij","Minder dan 1 jaar","1–3 jaar","3–5 jaar","5 jaar of meer"]},
+
+  // Q3 — specialisation (multi-select)
+  {id:"spec", text:"Wat is je voornaamste technische specialisatie? Je kunt meerdere opties selecteren.", type:"multi_choice",
+    opts:["Elektrotechniek","Werktuigbouw / mechanica","HVAC / klimaat","Installatietechniek","Mechatronica","Automatisering / PLC-besturing","Instrumentatie & meet- en regeltechniek","Mijn specialisatie staat er niet tussen"]},
+
+  // Q4 — work/think level
+  {id:"opl", text:"Wat is je werk- en denkniveau?", type:"choice",
+    opts:["Geen diploma, wel relevante werkervaring","VMBO / MBO niveau 2","MBO niveau 3","MBO niveau 4","HBO werk- en denkniveau of diploma","WO / universitair niveau"]},
+
+  // Q5 — travel time (minutes)
+  {id:"reis", text:"Hoeveel minuten mag je maximale reistijd per dag zijn?", type:"time_slider"},
+
+  // Q6 — desired salary
+  {id:"sal", text:"Wat is je gewenste bruto maandsalaris per maand?", type:"salary"},
+
+  // Q7 — indoor/outdoor preference
+  {id:"dienst", text:"Heb je een voorkeur voor binnendienst of buitendienst?", type:"choice",
+    opts:["Binnendienst","Buitendienst","Geen voorkeur / combinatie"]},
+  // ploegendienst inserted conditionally after dienst
+
+  // Q8 — international
+  {id:"intl", text:"Sta je open voor internationaal werk?", type:"choice",
+    opts:["Ja, graag","Incidenteel is oké","Nee"]},
+
+  // Q9 — hours
+  {id:"uren", text:"Hoeveel uur wil je maximaal per week werken?", type:"choice",
+    opts:["32 uur","36 uur","38 uur","40 uur","Meer dan 40 uur"]}
+];
+
+const PLOEG_Q = {id:"ploeg", text:"Sta je open voor werken in ploegendienst?", type:"choice",
+  opts:["Geen ploegendienst","2-ploegen","3-ploegen","4-ploegen","5-ploegen","Alle ploegen goed"]};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+function readUrlParams(){
+  const p=new URLSearchParams(window.location.search);
+  return {
+    vacancyKey:p.get("vacancy")||null,
+    candidate:{name:p.get("name")||"",phone:p.get("phone")||"",email:p.get("email")||"",city:p.get("city")||""},
+    changedEntityId:p.get("changedEntityId")||""
+  };
+}
+const params=readUrlParams();
+const STOR_KEY=(params.changedEntityId&&params.vacancyKey)?"glj_"+params.changedEntityId+"_"+params.vacancyKey:null;
+
+let S={
+  cand:params.candidate, changedEntityId:params.changedEntityId, vk:params.vacancyKey, sid:uid(),
+  phase:params.vacancyKey?"generic":"select",
+  gIdx:0, plgPend:false, specCustomMode:false, multiSelected:[],
+  cvStep:"upl", weStep:null, wExps:[], curWE:{},
+  vqIdx:0, retVk:null, retVqIdx:0, isRet:false,
+  ans:{}, timestamps:{}, salMin:2750, salMax:3500, travelMin:30,
+  msgs:[], typing:false, done:false
+};
+
+// ── UTILITIES ─────────────────────────────────────────────────────────────────
+function uid(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36)}
+function fmtSal(v){return"\u20ac\u202f"+v.toLocaleString("nl-NL")}
+function fmtTime(v){return v>=90?"90+ minuten":"Max. "+v+" minuten"}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function nowStamp(){
+  const d=new Date();
+  const dd=String(d.getDate()).padStart(2,"0"),mm=String(d.getMonth()+1).padStart(2,"0"),yy=String(d.getFullYear()).slice(-2);
+  const hh=String(d.getHours()).padStart(2,"0"),mi=String(d.getMinutes()).padStart(2,"0");
+  return`${dd}/${mm}/${yy} ${hh}:${mi}`;
+}
+function qLabel(id){
+  for(const q of GQ){if(q.id===id)return q.text==="__dynamic__"?"Vergelijkbare functie-ervaring":q.text}
+  if(id==="ploeg")return PLOEG_Q.text;
+  for(const v of Object.values(VACANCIES)){for(const q of v.extra){if(q.id===id)return q.text}}
+  const fb={cv_upl:"Heb je al je CV geüpload?",cv_hv:"Heb je een CV beschikbaar?"};
+  return fb[id]||id;
+}
+
+// ── LOCAL STORAGE ─────────────────────────────────────────────────────────────
+function saveState(){
+  if(!STOR_KEY)return;
+  try{localStorage.setItem(STOR_KEY,JSON.stringify({
+    sid:S.sid,ans:S.ans,timestamps:S.timestamps,wExps:S.wExps,
+    salMin:S.salMin,salMax:S.salMax,travelMin:S.travelMin,
+    phase:S.phase,gIdx:S.gIdx,vqIdx:S.vqIdx,plgPend:S.plgPend,
+    cvStep:S.cvStep,weStep:S.weStep,done:S.done,
+    isRet:S.isRet,retVk:S.retVk,retVqIdx:S.retVqIdx
+  }));}catch(e){}
+}
+function loadSaved(){
+  if(!STOR_KEY)return null;
+  try{const d=localStorage.getItem(STOR_KEY);return d?JSON.parse(d):null;}catch(e){return null;}
+}
+
+// ── WEBHOOK + NOTE ─────────────────────────────────────────────────────────────
+function sendHook(data){
+  const note=buildNote();
+  const payload={...data,session_id:S.sid,changedEntityId:S.changedEntityId,candidate:S.cand,
+    vacancy_id:S.vk,vacancy_title:S.vk?VACANCIES[S.vk].title:"",monday_note:note,ts:new Date().toISOString()};
+  console.log("%cWebhook","color:#053234;font-weight:bold","\n"+JSON.stringify(payload,null,2));
+  if(!WEBHOOK)return;
+  fetch(WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}).catch(()=>{});
+}
+
+function buildNote(){
+  const a=S.ans,ts=S.timestamps,lines=[];
+  function addQA(label,val,tsKey){
+    if(!val)return;
+    const t=ts[tsKey]||"";
+    lines.push(label);
+    lines.push(val+(t?"  \u00b7  "+t:""));
+    lines.push("");
+  }
+  const order=["exp_total","exp_rel","spec","opl","reis","sal","dienst","ploeg","intl","uren"];
+  for(const id of order){
+    if(!a[id])continue;
+    const label=id==="exp_rel"&&S.vk&&VACANCIES[S.vk]
+      ?"En hoeveel jaar heb je gewerkt als "+VACANCIES[S.vk].roleLabel+" of in een vergelijkbare functie?"
+      :qLabel(id);
+    addQA(label,a[id],id);
+  }
+  if(a.cv_upl){
+    const cv=a.cv_upl==="Ja, al gedaan"?"Geüpload tijdens de sollicitatie":a.cv_hv==="Ja, ik heb een CV"?"CV via WhatsApp gestuurd":"Geen CV beschikbaar";
+    addQA("Heb je al een CV?",cv,"cv_upl");
+  }
+  if(S.wExps.length>0){
+    lines.push("Werkervaring");
+    S.wExps.forEach((w,i)=>{const ro=w.ro.length>120?w.ro.slice(0,117)+"...":w.ro;lines.push(`${i+1}. ${w.co} / ${ro} / ${w.pr}`);});
+    lines.push("");
+  }
+  if(S.vk){
+    const v=VACANCIES[S.vk];
+    lines.push(`\u2500\u2500 ${v.title} (${v.client}) \u2500\u2500`);lines.push("");
+    for(const q of v.extra)addQA(q.text,a[q.id],q.id);
+  }
+  if(S.retVk){
+    const rv=VACANCIES[S.retVk];
+    lines.push(`\u2500\u2500 ${rv.title} (${rv.client}) \u2500\u2500`);lines.push("");
+    for(const q of rv.extra)addQA(q.text,a["r_"+q.id],"r_"+q.id);
+  }
+  lines.push("\u2713 "+nowStamp());
+  return lines.join("\n");
+}
+
+// ── QUESTION ROUTER ───────────────────────────────────────────────────────────
+function getQ(){
+  const s=S;
+  if(s.phase==="generic"){
+    if(s.specCustomMode)return{id:"spec_custom",type:"text",ph:"Omschrijf je specialisatie zo specifiek mogelijk..."};
+    if(s.plgPend)return PLOEG_Q;
+    const q=GQ[s.gIdx]||null;
+    // Inject dynamic role label into Q2
+    if(q&&q.id==="exp_rel"){
+      const lbl=(s.vk&&VACANCIES[s.vk]?.roleLabel)||"deze functie";
+      return{...q,text:"En hoeveel jaar heb je gewerkt als "+lbl+" of in een vergelijkbare functie?"};
+    }
+    return q;
+  }
+  if(s.phase==="cv"){
+    if(s.cvStep==="upl")return{id:"cv_upl",type:"choice",opts:["Ja, al gedaan","Nee"]};
+    if(s.cvStep==="hv") return{id:"cv_hv", type:"choice",opts:["Ja, ik heb een CV","Nee, ik heb geen CV"]};
+    return null;
+  }
+  if(s.phase==="work_experience"){
+    if(s.weStep==="co")  return{id:"we_co",  type:"text",     ph:"Naam van het bedrijf"};
+    if(s.weStep==="ro")  return{id:"we_ro",  type:"textarea", ph:"Bijv: monteur, werkte aan productielijnen, storingen, preventief onderhoud..."};
+    if(s.weStep==="pr")  return{id:"we_pr",  type:"text",     ph:"Bijv: 2019 \u2013 heden"};
+    if(s.weStep==="more")return{id:"we_more",type:"choice",   opts:["Ja, nog een toevoegen","Nee, dat is alles"]};
+    return null;
+  }
+  if(s.phase==="vacancy_specific")return VACANCIES[s.vk]?.extra[s.vqIdx]||null;
+  if(s.phase==="return_specific") return VACANCIES[s.retVk]?.extra[s.retVqIdx]||null;
+  return null;
+}
+
+// ── LOGIC ─────────────────────────────────────────────────────────────────────
+function addMsg(sender,text,extra){S.msgs.push({id:uid(),sender,text,...(extra||{})});}
+
+function bot(text,cb,delay){
+  S.typing=true;render();
+  setTimeout(()=>{S.typing=false;addMsg("bot",text);if(cb)cb();else render();},delay||(700+Math.random()*350));
+}
+
+function handleAnswer(answer){
+  const q=getQ();if(!q)return;
+  addMsg("user",answer);
+  const key=S.phase==="return_specific"?"r_"+q.id:q.id;
+  S.ans[key]=answer;S.timestamps[key]=nowStamp();
+  sendHook({status:"in_progress",last_q:q.id,last_a:answer,answers:{...S.ans},work_exp:S.wExps});
+  saveState();
+  if     (S.phase==="generic")         handleGeneric(q,answer);
+  else if(S.phase==="cv")              handleCV(q,answer);
+  else if(S.phase==="work_experience") handleWE(q,answer);
+  else if(S.phase==="vacancy_specific")handleVS();
+  else if(S.phase==="return_specific") handleReturn();
+}
+
+function handleGeneric(q,answer){
+  if(q.id==="spec_custom"){
+    S.ans["spec"]=answer;S.timestamps["spec"]=nowStamp();
+    S.specCustomMode=false;S.gIdx++;bot(GQ[S.gIdx].text,render);return;
+  }
+  if(q.id==="dienst"&&answer!=="Buitendienst"){S.plgPend=true;bot(PLOEG_Q.text,render);return;}
+  if(q.id==="ploeg"){S.plgPend=false;S.gIdx++;bot(GQ[S.gIdx].text,render);return;}
+  if(S.gIdx+1<GQ.length){S.gIdx++;
+    const nq=getQ();
+    bot(nq?nq.text:"",render);
+  }else startCVPhase();
+}
+
+function startCVPhase(){S.phase="cv";S.cvStep="upl";bot("Heb je al je CV geüpload?",render);}
+
+function handleCV(q,answer){
+  if(q.id==="cv_upl"){
+    if(answer==="Ja, al gedaan"){bot("Top! Dan hebben we je CV al ontvangen.",()=>startVS());}
+    else{S.cvStep="hv";bot("Geen probleem. Heb je een CV die je kunt sturen?",render);}
+  }else if(q.id==="cv_hv"){
+    if(answer==="Ja, ik heb een CV"){
+      bot("Stuur je CV via WhatsApp naar +"+WA_NUMBER+".\n\nWe kijken ernaar en nemen zo snel mogelijk contact op.",()=>{
+        bot("Ondertussen stel ik je de vacature-specifieke vragen.",()=>startVS(),700);
+      });
+    }else{
+      bot("Geen probleem! Dan stel ik je een paar vragen over je werkervaring.\n\nBij welk bedrijf heb je het meest recentelijk gewerkt?",()=>{
+        S.phase="work_experience";S.weStep="co";S.wExps=[];S.curWE={};render();
+      });
+    }
+  }
+}
+
+function handleWE(q,answer){
+  if(S.weStep==="co"){S.curWE.co=answer;S.weStep="ro";bot("Wat was je functietitel en wat deed je er precies?\n\nWees zo specifiek mogelijk: type machines, soort werkzaamheden, materialen, projecten.",render);}
+  else if(S.weStep==="ro"){S.curWE.ro=answer;S.weStep="pr";bot("Van wanneer tot wanneer heb je daar gewerkt?",render);}
+  else if(S.weStep==="pr"){
+    S.curWE.pr=answer;S.wExps.push({...S.curWE});S.curWE={};S.weStep="more";
+    bot("Werkervaring "+S.wExps.length+" opgeslagen \u2713\n\nWil je nog een werkervaring toevoegen?",render);
+  }else if(S.weStep==="more"){
+    if(answer.startsWith("Ja")){S.weStep="co";bot("Bij welk bedrijf heb je daarvoor gewerkt?",render);}
+    else bot("Bedankt! Dat geeft een goed beeld van je achtergrond.",()=>startVS());
+  }
+}
+
+function startVS(){
+  const v=VACANCIES[S.vk];S.phase="vacancy_specific";S.vqIdx=0;
+  bot("Dan heb ik nog "+v.extra.length+" vragen specifiek voor de functie "+v.title+".",()=>{bot(v.extra[0].text,render,500);});
+}
+
+function handleVS(){
+  const v=VACANCIES[S.vk];
+  if(S.vqIdx+1<v.extra.length){S.vqIdx++;bot(v.extra[S.vqIdx].text,render);}
+  else finish();
+}
+
+function finish(){
+  S.done=true;S.phase="done";
+  sendHook({status:"completed",answers:{...S.ans},work_exp:S.wExps});
+  saveState();
+  const fn=S.cand.name?S.cand.name.split(" ")[0]:"";
+  bot("Bedankt"+(fn?", "+fn:"")+"! Je gegevens zijn ontvangen.\n\nEen recruiter neemt zo snel mogelijk contact met je op.",()=>{
+    const sugKeys=(VACANCIES[S.vk]?.suggests||[]);
+    const others=sugKeys.map(k=>[k,VACANCIES[k]]).filter(([,v])=>v);
+    if(others.length){
+      const n=others.length;
+      const msg=n===1
+        ?"Er is nog een vacature die goed bij jou kan passen. Interesse? Je hoeft maar een paar vragen te beantwoorden."
+        :"Er zijn nog "+n+" vacatures die goed bij jou kunnen passen. Klik op een om je interesse te tonen \u2014 je hoeft maar een paar vragen te beantwoorden.";
+      setTimeout(()=>{addMsg("bot",msg);addMsg("suggest","",{vacs:others});render();},900);
+    }else render();
+  });
+}
+
+function startReturn(k){
+  if(S.isRet)return;
+  S.retVk=k;S.isRet=true;S.done=false;S.phase="return_specific";S.retVqIdx=0;
+  const v=VACANCIES[k];
+  addMsg("user","Interesse in "+v.title);
+  bot("Top! Dan stel ik je de "+v.extra.length+" vragen voor "+v.title+" bij "+v.client+" in "+v.loc+".\n\n"+v.extra[0].text,render,800);
+}
+
+function handleReturn(){
+  const rv=VACANCIES[S.retVk];
+  if(S.retVqIdx+1<rv.extra.length){S.retVqIdx++;bot(rv.extra[S.retVqIdx].text,render);}
+  else{
+    sendHook({status:"completed_additional",additional_vacancy:S.retVk,answers:{...S.ans}});
+    bot("Goed! We kijken ook of je geschikt bent voor "+rv.title+" bij "+rv.client+". De recruiter neemt dit mee.",()=>{
+      S.done=true;S.phase="done";saveState();render();
+    });
+  }
+}
+
+// ── RENDERING ─────────────────────────────────────────────────────────────────
+function render(){
+  const app=document.getElementById("app");if(!app)return;
+  if(S.phase==="select") {renderSelect(app);return;}
+  if(S.phase==="blocked"){renderBlocked(app);return;}
+  renderChat(app);
+}
+
+function renderSelect(app){
+  const groups={};
+  for(const[k,v]of Object.entries(VACANCIES)){const c=v.client||"Overig";if(!groups[c])groups[c]=[];groups[c].push([k,v]);}
+  app.innerHTML=`<div class="select-screen">
+    <div class="sel-logo"><div class="sel-logo-mark">GLJ</div><div class="sel-logo-text">Good Life Jobs</div></div>
+    <div class="sel-title">Selecteer een vacature</div>
+    ${Object.entries(groups).map(([client,vacs])=>`
+      <div class="client-group">
+        <div class="client-header">${esc(client)}</div>
+        <div class="vac-cards">${vacs.map(([k,v])=>`
+          <button class="vac-card" data-k="${k}">
+            <div class="vac-name">${v.title}</div>
+            <div class="vac-loc">&#128205; ${v.loc}</div>
+          </button>`).join("")}
+        </div>
+      </div>`).join("")}
+  </div>`;
+  app.querySelectorAll(".vac-card").forEach(b=>b.onclick=()=>{
+    S.vk=b.dataset.k;S.phase="generic";S.gIdx=0;render();
+    setTimeout(()=>{
+      const v=VACANCIES[S.vk];
+      bot("Welkom bij de sollicitatie voor "+v.title+" bij "+v.client+" in "+v.loc+"!\n\nJe gegevens zijn ontvangen. Ik stel je nu een paar aanvullende vragen.\n\n"+GQ[0].text,render,600);
+    },80);
+  });
+}
+
+function renderBlocked(app){
+  app.innerHTML=`<div class="select-screen" style="text-align:center;padding-top:4rem">
+    <div class="sel-logo" style="justify-content:center;margin-bottom:2rem">
+      <div class="sel-logo-mark">GLJ</div><div class="sel-logo-text">Good Life Jobs</div>
+    </div>
+    <div style="font-size:40px;margin-bottom:1rem;color:var(--teal)">&#10003;</div>
+    <div style="font-weight:700;font-size:16px;color:var(--dark);margin-bottom:8px">Gesprek al afgerond</div>
+    <div style="font-size:13px;color:#666;line-height:1.6">Je antwoorden zijn opgeslagen.<br>Een recruiter neemt zo snel mogelijk contact met je op.</div>
+  </div>`;
+}
+
+function renderChat(app){
+  const v=S.vk?VACANCIES[S.vk]:null;
+  const vqT=S.vk?VACANCIES[S.vk].extra.length:0;
+  const tot=GQ.length+1+1+Math.max(S.wExps.length*3,0)+vqT;
+  const dc=Object.keys(S.ans).length+S.wExps.length*3;
+  const pct=(S.done&&S.phase==="done")?100:Math.min(Math.round((dc/Math.max(tot,13))*100),94);
+  const name=S.cand.name||"Kandidaat";
+  const ini=name.split(" ").filter(Boolean).map(w=>w[0]).slice(0,2).join("").toUpperCase()||"?";
+  const hdr=v?v.title+" \u00b7 "+v.client:"";
+
+  app.innerHTML=`<div class="shell">
+    <div class="hd">
+      <div class="hd-logo"><div class="hd-logo-mark">GLJ</div><div class="hd-logo-text">Good Life Jobs</div></div>
+      <div class="hd-row">
+        <div style="flex:1;min-width:0"><div class="hd-title">${esc(hdr)}</div><div class="hd-sub">Sollicitatiegesprek</div></div>
+        <div class="hd-pct">${pct}%</div>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="cbar"><div class="cbar-av">${ini}</div><div class="cbar-name">${esc(name)}</div></div>
+    <div class="msgs" id="msgs">
+      ${S.msgs.map(m=>renderMsg(m)).join("")}
+      ${S.typing?`<div class="msg-row nm"><div class="bubble bot" style="display:flex;gap:4px;align-items:center;padding:10px 14px"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`:""}
+      <div id="btm"></div>
+    </div>
+    <div class="inp-area">${renderInput()}</div>
+  </div>`;
+  setTimeout(()=>document.getElementById("btm")?.scrollIntoView({behavior:"smooth"}),30);
+  bindEvents();
+}
+
+function renderMsg(m){
+  if(m.sender==="suggest"){
+    return`<div class="sug-wrap nm">${m.vacs.map(([k,v2])=>{
+      const sel=S.isRet&&S.retVk===k,dim=S.isRet&&S.retVk!==k;
+      return`<button class="sug-card ${sel?"selected":""} ${dim?"dim":""}" data-k="${k}">
+        <div class="sug-title">${v2.title}</div>
+        <div class="sug-client">${v2.client}</div>
+        <div class="sug-loc">&#128205; ${v2.loc}</div>
+        <div class="sug-cta ${sel?"done":"active"}">${sel?"\u2713 Interesse toegevoegd":v2.extra.length+" vragen \u00b7 Toon ook interesse \u2192"}</div>
+      </button>`;
+    }).join("")}</div>`;
+  }
+  return`<div class="msg-row ${m.sender} nm"><div class="bubble ${m.sender}">${esc(m.text)}</div></div>`;
+}
+
+function renderInput(){
+  if(S.typing||(S.done&&S.phase==="done")){
+    return S.done?`<div class="done-bar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e7e34" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Gesprek voltooid &middot; gegevens ontvangen
+    </div>`:"";
+  }
+  const q=getQ();if(!q)return"";
+
+  if(q.type==="multi_choice"){
+    if(S.specCustomMode)return`<div class="txt-row"><input type="text" id="ti" placeholder="Omschrijf je specialisatie zo specifiek mogelijk..."><button class="send-btn" id="sb">Stuur</button></div>`;
+    const hasSel=S.multiSelected.length>0;
+    return`<div><div class="chips">${q.opts.map(o=>{
+      const isC=o==="Mijn specialisatie staat er niet tussen",sel=S.multiSelected.includes(o);
+      return`<button class="chip multi-chip ${isC?"custom-opt":""} ${sel?"selected":""}" data-o="${esc(o)}">${esc(o)}</button>`;
+    }).join("")}</div>
+    <div class="multi-go-wrap"><button class="confirm-btn" id="multi-go" ${!hasSel?"disabled":""}>
+      ${hasSel?"Ga door \u2192":"Selecteer een of meer opties"}
+    </button></div></div>`;
+  }
+
+  if(q.type==="choice")return`<div class="chips">${(q.opts||[]).map(o=>`<button class="chip" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+
+  if(q.type==="salary"){
+    const mx=Math.max(S.salMax,S.salMin+250);
+    return`<div class="slider-wrap">
+      <div class="slider-row"><div class="slider-lbl"><span>Minimum</span><strong id="lbl-mn">${fmtSal(S.salMin)}</strong></div><input type="range" id="sal-mn" min="2000" max="6000" step="250" value="${S.salMin}"></div>
+      <div class="slider-row"><div class="slider-lbl"><span>Maximum</span><strong id="lbl-mx">${fmtSal(mx)}</strong></div><input type="range" id="sal-mx" min="${S.salMin+250}" max="6500" step="250" value="${mx}"></div>
+      <div class="slider-val-row"><div class="slider-disp" id="sal-disp">${fmtSal(S.salMin)} \u2013 ${fmtSal(mx)}</div></div>
+      <button class="confirm-btn sal-ok">Dit klopt \u2192</button>
+    </div>`;
+  }
+
+  if(q.type==="time_slider")return`<div class="slider-wrap">
+    <div class="slider-row"><div class="slider-lbl"><span>Maximale reistijd</span><strong id="lbl-time">${fmtTime(S.travelMin)}</strong></div><input type="range" id="time-sl" min="10" max="90" step="10" value="${Math.min(S.travelMin,90)}"></div>
+    <div class="slider-val-row"><div class="slider-disp" id="time-disp">${fmtTime(S.travelMin)}</div></div>
+    <button class="confirm-btn time-ok">Dit klopt \u2192</button>
+  </div>`;
+
+  const isTA=q.type==="textarea";
+  return`<div class="txt-row">
+    ${isTA?`<textarea id="ti" placeholder="${esc(q.ph||"Typ hier...")}" rows="2"></textarea>`:`<input type="text" id="ti" placeholder="${esc(q.ph||"Typ hier...")}">`}
+    <button class="send-btn" id="sb">Stuur</button>
+  </div>`;
+}
+
+// ── EVENTS ────────────────────────────────────────────────────────────────────
+function bindEvents(){
+  const app=document.getElementById("app");if(!app)return;
+
+  app.querySelectorAll(".chip:not(.multi-chip)").forEach(b=>b.onclick=()=>handleAnswer(b.dataset.o));
+
+  app.querySelectorAll(".multi-chip").forEach(b=>{
+    b.onclick=()=>{
+      const opt=b.dataset.o;
+      if(opt==="Mijn specialisatie staat er niet tussen"){S.multiSelected=[];S.specCustomMode=true;render();return;}
+      S.specCustomMode=false;
+      const idx=S.multiSelected.indexOf(opt);
+      if(idx>-1){S.multiSelected.splice(idx,1);b.classList.remove("selected");}
+      else{S.multiSelected.push(opt);b.classList.add("selected");}
+      const go=document.getElementById("multi-go");
+      if(go){go.disabled=S.multiSelected.length===0;go.textContent=S.multiSelected.length>0?"Ga door \u2192":"Selecteer een of meer opties";}
+    };
+  });
+
+  const go=document.getElementById("multi-go");
+  if(go)go.onclick=()=>{if(S.multiSelected.length>0){const ans=S.multiSelected.join(", ");S.multiSelected=[];handleAnswer(ans);}};
+
+  app.querySelectorAll(".sug-card").forEach(b=>b.onclick=()=>startReturn(b.dataset.k));
+
+  const ti=document.getElementById("ti"),sb=document.getElementById("sb");
+  if(ti){
+    setTimeout(()=>{try{ti.focus();}catch(e){}},80);
+    const send=()=>{const v=ti.value.trim();if(v)handleAnswer(v);};
+    ti.tagName==="INPUT"?ti.onkeydown=e=>{if(e.key==="Enter")send();}:ti.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}};
+    if(sb)sb.onclick=send;
+  }
+
+  const mn=document.getElementById("sal-mn"),mx=document.getElementById("sal-mx");
+  const lmn=document.getElementById("lbl-mn"),lmx=document.getElementById("lbl-mx");
+  const dsp=document.getElementById("sal-disp"),ok=document.querySelector(".sal-ok");
+  function updSal(){
+    if(lmn)lmn.textContent=fmtSal(S.salMin);if(lmx)lmx.textContent=fmtSal(S.salMax);
+    if(dsp)dsp.textContent=fmtSal(S.salMin)+" \u2013 "+fmtSal(S.salMax);
+    if(mx){mx.min=S.salMin+250;mx.value=S.salMax;}
+  }
+  if(mn)mn.oninput=()=>{S.salMin=+mn.value;if(S.salMax<=S.salMin)S.salMax=S.salMin+250;updSal();};
+  if(mx)mx.oninput=()=>{S.salMax=+mx.value;updSal();};
+  if(ok)ok.onclick=()=>handleAnswer(fmtSal(S.salMin)+" \u2013 "+fmtSal(S.salMax)+" per maand");
+
+  const tsl=document.getElementById("time-sl"),ltm=document.getElementById("lbl-time"),tdsp=document.getElementById("time-disp"),tok=document.querySelector(".time-ok");
+  if(tsl)tsl.oninput=()=>{S.travelMin=+tsl.value;if(ltm)ltm.textContent=fmtTime(S.travelMin);if(tdsp)tdsp.textContent=fmtTime(S.travelMin);};
+  if(tok)tok.onclick=()=>handleAnswer(fmtTime(S.travelMin));
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(function init(){
+  const saved=loadSaved();
+  if(saved&&saved.done){S.done=true;S.phase="blocked";render();return;}
+  render();
+  if(S.vk&&S.phase==="generic"){
+    const v=VACANCIES[S.vk];
+    if(v){
+      setTimeout(()=>{
+        bot("Welkom bij de sollicitatie voor "+v.title+" bij "+v.client+" in "+v.loc+"!\n\nJe gegevens zijn ontvangen. Ik stel je nu een paar aanvullende vragen.\n\n"+GQ[0].text,render,600);
+      },200);
+    }else{S.phase="select";render();}
+  }
+})();
+</script>
+</body>
+</html>
