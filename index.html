@@ -83,6 +83,7 @@
 <body>
 <div id="app"></div>
 <script>
+// Make Scenario 1 (Bullhorn) webhook — taken from the Bullhorn testing repo.
 const WEBHOOK   = "https://hook.eu1.make.com/eaaq4528qj63w4he3anbrenhkwntv5d8";
 const WA_NUMBER = "31657900347";
 
@@ -190,7 +191,7 @@ const VACANCIES = {
   "teamleider-td-huis-van-bakkers": {
     title:"Teamleider Technische Dienst", client:"Huis van Bakkers", loc:"Nieuw Amsterdam",
     roleLabel:"monteur in de technische dienst",
-    suggests:["monteur-koeltechniek-tolsma","monteur-elektro-tolsma"],
+    suggests:["monteur-koeltechniek-tolsma","monteur-elektro-tolsma","monteur-td-goedhart-leeuwarden"],
     extra:[
       {id:"leidinggevend", text:"Heb je ervaring in een leidinggevende of coördinerende rol in een technische omgeving?", type:"choice",
         opts:["Ja, formele leidinggevende functie","Ja, informele leidersrol op de werkvloer","Nee, maar wil deze stap zetten","Nee"]},
@@ -270,7 +271,7 @@ const VACANCIES = {
   "monteur-elektro-tolsma": {
     title:"Monteur Elektrotechniek", client:"Tolsma-Grisnich", loc:"Emmeloord",
     roleLabel:"elektromonteur",
-    suggests:["monteur-koeltechniek-tolsma","teamleider-td-huis-van-bakkers"],
+    suggests:["monteur-koeltechniek-tolsma","teamleider-td-huis-van-bakkers","monteur-td-goedhart-leeuwarden"],
     extra:[
       {id:"industrieel_elektro", text:"Heb je ervaring met elektrotechnische installaties in een industriële of agrarische omgeving?", type:"choice",
         opts:["Ja, uitgebreide ervaring","Ja, beperkte ervaring","Geen agrarische ervaring, wel industrieel","Nee"]},
@@ -280,6 +281,22 @@ const VACANCIES = {
         opts:["Ja, geen probleem","Incidenteel is oké","Nee, liever niet"]},
       {id:"schemas", text:"Heb je ervaring met het lezen en interpreteren van elektrotechnische schema's en tekeningen?", type:"choice",
         opts:["Ja, standaard onderdeel van mijn werk","Ja, met enige moeite","Beperkte ervaring","Nee"]}
+    ]
+  },
+
+  "monteur-td-goedhart-leeuwarden": {
+    title:"Monteur Technische Dienst", client:"Goedhart Bakery Kitchen", loc:"Leeuwarden",
+    roleLabel:"monteur technische dienst",
+    suggests:["teamleider-td-huis-van-bakkers","monteur-elektro-tolsma"],
+    extra:[
+      {id:"storing_lwd", text:"Hoe zou je je aanpak van storingen aan productiemachines omschrijven?", type:"choice",
+        opts:["Ik stel zelfstandig diagnose, los op \u00e9n denk mee over structurele verbeteringen","Ik stel zelfstandig diagnose en los storingen op","Ik los storingen op samen met het team","Ik heb beperkte ervaring met storingsonderhoud"]},
+      {id:"automatisering_lwd", text:"Heb je ervaring met onderhoud of storingen aan productiemachines in een geautomatiseerde of high care omgeving?", type:"choice",
+        opts:["Ja, ruime ervaring met geautomatiseerde lijnen of robots","Ja, beperkte ervaring","Andere productieomgeving, vergelijkbaar niveau","Nee, maar ik wil me hierin ontwikkelen"]},
+      {id:"consignatie_lwd", text:"Ben je bereid om consignatiedienst (bereikbaarheidsdienst buiten werktijd) te draaien?", type:"choice",
+        opts:["Ja, geen probleem","Incidenteel is ok\u00e9","Nee, liever niet"]},
+      {id:"vervoer_lwd", text:"Heb je eigen vervoer om op de locatie in Leeuwarden te komen, ook tijdens consignatie- of avonddiensten?", type:"choice",
+        opts:["Ja, ik heb eigen vervoer","Nee, maar ik kan dit regelen","Nee, ik ben afhankelijk van openbaar vervoer"]}
     ]
   }
 };
